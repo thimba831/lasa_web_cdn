@@ -73,12 +73,8 @@ export default function Patients() {
               return (
                 <tr key={item.id}>
                   <td className="p-2">{item.name}</td>
-                  <td className="p-2">
-                    {item.signupDate || "10/18/23 5:45pm"}
-                  </td>
-                  <td className="p-2">
-                    {item.appointmentDate || "10/18/23 5:45pm"}
-                  </td>
+                  <td className="p-2">{item.signupDate}</td>
+                  <td className="p-2">{item.appointmentDate}</td>
                   <td className="p-2">
                     <div className="flex gap-3 items-center">
                       <Link href="#" className="flex-1 text-orange">
