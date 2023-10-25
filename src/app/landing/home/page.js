@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { getPatientList } from "@/app/data/patients";
 import { getProfile } from "@/app/data/profile";
-import moment from "moment/moment";
+import moment from "moment";
 
 export default function Home() {
   const patients = getPatientList();

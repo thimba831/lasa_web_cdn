@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { getPatientList } from "@/app/data/patients";
 import moment from "moment";
-import { useMemo } from "react";
 
 export default function Agenda() {
   const agenda = getPatientList()
