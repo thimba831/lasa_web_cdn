@@ -1,59 +1,28 @@
-import Link from "next/link";
+"use client";
 
-const data = [
-  {
-    id: 1,
-    name: "Brenna Foster",
-    signupDate: "5/7/23 9:15am",
-    appointmentDate: "5/12/23 2:00pm",
-    likes: 3,
-    dislikes: 4,
-  },
-  {
-    id: 2,
-    name: "Brenna Test",
-    signupDate: "5/7/23 9:15am",
-    appointmentDate: "5/12/23 2:00pm",
-    likes: 13,
-    dislikes: 5,
-  },
-  {
-    id: 3,
-    name: "Perry Foster",
-    signupDate: "5/7/23 9:15am",
-    appointmentDate: "5/12/23 2:00pm",
-    likes: 6,
-    dislikes: 4,
-  },
-  {
-    id: 4,
-    name: "Perry Foster",
-    signupDate: "5/7/23 9:15am",
-    appointmentDate: "5/12/23 2:00pm",
-    likes: 6,
-    dislikes: 4,
-  },
-  {
-    id: 5,
-    name: "Perry Foster",
-    signupDate: "5/7/23 9:15am",
-    appointmentDate: "5/12/23 2:00pm",
-    likes: 6,
-    dislikes: 4,
-  },
-  {
-    id: 6,
-    name: "Perry Foster",
-    signupDate: "5/7/23 9:15am",
-    appointmentDate: "5/12/23 2:00pm",
-    likes: 6,
-    dislikes: 4,
-  },
-];
+import Link from "next/link";
+import { getPatientList } from "@/app/data/patients";
+import PatientCreateModal from "@/app/components/patients/create-modal";
+import { useState } from "react";
+
 export default function Patients() {
+  const [creatModalVisible, setCreateModalVisible] = useState(false);
+  const [patientList, setPatientList] = useState(getPatientList());
+  const onNewPatientCreated = (newPatient) => {
+    setPatientList((draft) => [...draft, newPatient]);
+  };
+
   return (
     <div className="px-6 pt-12 lg:px-8">
-      <h1 className="font-semibold text-2xl m-12">Newest Patients</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="font-semibold text-2xl m-12">Patients</h1>
+        <button
+          className="btn-main"
+          onClick={() => setCreateModalVisible(true)}
+        >
+          Add New Patient
+        </button>
+      </div>
 
       <div className="mt-12 mx-6">
         <table className="w-full text-left">
@@ -100,23 +69,30 @@ export default function Patients() {
             </tr>
           </thead>
           <tbody className="w-full">
-            {data.map((item) => {
+            {patientList.map((item) => {
               return (
                 <tr key={item.id}>
                   <td className="p-2">{item.name}</td>
-                  <td className="p-2">{item.signupDate}</td>
-                  <td className="p-2">{item.appointmentDate}</td>
+                  <td className="p-2">
+                    {item.signupDate || "10/18/23 5:45pm"}
+                  </td>
+                  <td className="p-2">
+                    {item.appointmentDate || "10/18/23 5:45pm"}
+                  </td>
                   <td className="p-2">
                     <div className="flex gap-3 items-center">
                       <Link href="#" className="flex-1 text-orange">
-                        {item.likes} likely
+                        {item.likes || 0} likely
                       </Link>
                       <Link href="#" className="flex-1 text-main">
-                        {item.dislikes} likely
+                        {item.unlikes || 0} unlikely
                       </Link>
-                      <button className="btn-main-inverse ml-4">
+                      <Link
+                        href={`/landing/patients/${item.id}`}
+                        className="btn-main-inverse ml-4"
+                      >
                         View Profile
-                      </button>
+                      </Link>
                       <div className="flex-1"></div>
                     </div>
                   </td>
@@ -126,6 +102,12 @@ export default function Patients() {
           </tbody>
         </table>
       </div>
+
+      <PatientCreateModal
+        visible={creatModalVisible}
+        setVisible={setCreateModalVisible}
+        onCreated={onNewPatientCreated}
+      />
     </div>
   );
 }

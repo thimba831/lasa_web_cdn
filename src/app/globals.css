@@ -32,10 +32,6 @@ body {
   @apply p-2 rounded-lg border border-main focus:outline-none text-main
 }
 
-.form-control-inverse {
-  @apply rounded-lg border border-main p-2 focus:outline-none text-white bg-main
-}
-
 .btn-main {
   @apply py-2 px-4 rounded-xl border border-main bg-main text-white hover:bg-transparent hover:text-main
 }
