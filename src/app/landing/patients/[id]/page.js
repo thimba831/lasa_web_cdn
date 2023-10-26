@@ -6,6 +6,117 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import NotFound from "@/app/not-found";
 import { getPatientList } from "@/app/data/patients";
+import { Bar, Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const labels = [
+  "09/12",
+  "09/14",
+  "09/16",
+  "09/18",
+  "09/20",
+  "09/22",
+  "09/24",
+  "09/26",
+  "09/28",
+  "09/30",
+  "10/02",
+  "10/04",
+];
+
+const appUsageOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false,
+    },
+    title: {
+      display: true,
+      text: "App usage over time",
+    },
+  },
+};
+
+const appUsageData = {
+  labels,
+  datasets: [
+    {
+      data: labels.map(() => Math.random() * 100),
+      backgroundColor: "rgba(255, 99, 132, 0.5)",
+    },
+  ],
+};
+
+const stressOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false,
+    },
+    title: {
+      display: true,
+      text: "Stress over time",
+    },
+  },
+};
+
+const stressData = {
+  labels,
+  datasets: [
+    {
+      data: labels.map(() => Math.random() * 100),
+      borderColor: "rgb(255, 99, 132)",
+      backgroundColor: "rgba(255, 99, 132, 0.5)",
+      cubicInterpolationMode: "monotone",
+    },
+  ],
+};
+
+const painOptions = {
+  responsive: true,
+  plugins: {
+    legend: {
+      display: false,
+    },
+    title: {
+      display: true,
+      text: "Pain over time",
+    },
+  },
+};
+
+const painData = {
+  labels,
+  datasets: [
+    {
+      data: labels.map(() => Math.random() * 100),
+      borderColor: "rgb(255, 99, 132)",
+      backgroundColor: "rgba(255, 99, 132, 0.5)",
+      cubicInterpolationMode: "monotone",
+    },
+  ],
+};
 
 const matchingSymptoms = [
   "Pelvic Pain",
@@ -242,6 +353,18 @@ export default function PatientProfile({ params }) {
               </Accordion>
             ))}
           </div>
+        </div>
+
+        <div className="max-w-4xl	mx-auto py-4">
+          <Bar options={appUsageOptions} data={appUsageData} />
+        </div>
+
+        <div className="max-w-4xl	mx-auto py-4">
+          <Line options={stressOptions} data={stressData} />
+        </div>
+
+        <div className="max-w-4xl	mx-auto py-4">
+          <Line options={painOptions} data={painData} />
         </div>
       </div>
     </div>
