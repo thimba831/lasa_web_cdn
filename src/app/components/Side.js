@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getProfile } from "../data/profile";
 
 export default function Side({
   navigation,
@@ -7,6 +8,7 @@ export default function Side({
   showUserInfo = true,
   ...props
 }) {
+  const profile = getProfile();
   return (
     <aside className={`bg-yellow p-8 pt-12 hidden lg:block text-black`}>
       <div className="my-8">
@@ -21,22 +23,26 @@ export default function Side({
         </Link>
       </div>
       {showUserInfo && (
-        <div className="flex items-center leading-6 my-8 pl-4 py-4 bg-gradient-to-r from-yellow to-green30 rounded-xl">
-          <span className="mr-2 bg-green30 rounded-full overflow-hidden">
-            <Image
-              src={"/imgs/user.png"}
-              alt={"Avatar"}
-              width={60}
-              height={60}
-            />
-          </span>
-          <div>
-            <h2 className="font-semibold text-sm leading-6">
-              Centerville Clinic
-            </h2>
-            <p className="text-sm">Dr. Anne</p>
+        <Link href="/landing/settings">
+          <div className="flex items-center leading-6 my-8 pl-4 py-4 bg-gradient-to-r from-yellow to-green30 rounded-xl">
+            <span className="mr-2 bg-green30 rounded-full overflow-hidden">
+              <Image
+                src={"/imgs/user.png"}
+                alt={"Avatar"}
+                width={60}
+                height={60}
+              />
+            </span>
+            <div>
+              <h2 className="font-semibold text-sm leading-6">
+                {profile.clinic}
+              </h2>
+              <p className="text-sm">
+                {profile.degree}. {profile.name}
+              </p>
+            </div>
           </div>
-        </div>
+        </Link>
       )}
       <div className="my-8">
         {navigation.map((item) => (

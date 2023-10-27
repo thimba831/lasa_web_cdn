@@ -6,6 +6,7 @@ import PatientCreateModal from "@/app/components/patients/create-modal";
 import { useMemo, useState } from "react";
 import moment from "moment";
 import ThSort from "@/app/components/ThSort";
+import { getAppointmentRange } from "@/app/utils/dateUtil";
 
 export default function Patients() {
   const [creatModalVisible, setCreateModalVisible] = useState(false);
@@ -39,6 +40,20 @@ export default function Patients() {
           )
         );
       }
+      if (filter.startAppointmentDate) {
+        result = result.filter((item) =>
+          moment(item.appointmentDate).isAfter(
+            moment(filter.startAppointmentDate).startOf("day")
+          )
+        );
+      }
+      if (filter.endAppointmentDate) {
+        result = result.filter((item) =>
+          moment(item.appointmentDate).isBefore(
+            moment(filter.endAppointmentDate).startOf("day")
+          )
+        );
+      }
       if (filter.likely) {
         result = result.filter((item) => item.likes == filter.likely);
       }
@@ -63,8 +78,8 @@ export default function Patients() {
       }
       if (sorter.field === "signupDate" || sorter.field === "appointmentDate") {
         result = result.sort((a, b) => {
-          const tsA = moment(a["signupDate"]).valueOf();
-          const tsB = moment(b["signupDate"]).valueOf();
+          const tsA = moment(a[sorter.field]).valueOf();
+          const tsB = moment(b[sorter.field]).valueOf();
 
           if (tsA < tsB) {
             return sorter.direction ? 1 : -1;
@@ -90,85 +105,17 @@ export default function Patients() {
     <div className="px-6 pt-12 lg:px-8 text-black">
       <div className="flex justify-between items-center">
         <h1 className="font-semibold text-2xl m-12">Patients</h1>
+      </div>
+
+      <div className="mx-6">
         <button
-          className="btn-main"
+          className="btn-main mb-4"
           onClick={() => setCreateModalVisible(true)}
         >
           Add New Patient
         </button>
-      </div>
-
-      <div className="mt-12 mx-6">
         <table className="w-full text-left">
           <thead className="w-full">
-            <tr>
-              <th className="pb-4 pl-2" colSpan={4}>
-                <p className="text-gray-300 text-xl">Filters</p>
-              </th>
-            </tr>
-            <tr>
-              <th className="pb-5">
-                <input
-                  className="form-control"
-                  placeholder="Search Name"
-                  name="name"
-                  type="text"
-                  onChange={onFilterChange}
-                />
-              </th>
-              <th className="pb-5">
-                <div className="inline-flex items-center">
-                  <input
-                    type="date"
-                    className="form-control"
-                    name="startSignUpDate"
-                    onChange={onFilterChange}
-                  />
-                  <span className="px-1">~</span>
-                  <input
-                    type="date"
-                    className="form-control"
-                    name="endSignUpDate"
-                    onChange={onFilterChange}
-                  />
-                </div>
-              </th>
-              <th className="pb-5">
-                <div className="inline-flex items-center">
-                  <input
-                    type="date"
-                    className="form-control"
-                    name="startAppointmentDate"
-                    onChange={onFilterChange}
-                  />
-                  <span className="px-1">~</span>
-                  <input
-                    type="date"
-                    className="form-control"
-                    name="endAppointmentDate"
-                    onChange={onFilterChange}
-                  />
-                </div>
-              </th>
-              <th className="pb-5">
-                <div className="flex gap-1">
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="Likely condition"
-                    name="likely"
-                    onChange={onFilterChange}
-                  />
-                  <input
-                    type="number"
-                    className="form-control"
-                    placeholder="Unlikely condition"
-                    name="unlikely"
-                    onChange={onFilterChange}
-                  />
-                </div>
-              </th>
-            </tr>
             <tr>
               <th className="p-2">
                 <ThSort
@@ -194,7 +141,68 @@ export default function Patients() {
                   onClick={onClickHeader}
                 />
               </th>
-              <th className="p-2">Health Profile Flags</th>
+              <th colSpan={3} className="p-2">
+                Health Profile Flags
+              </th>
+            </tr>
+
+            <tr className="align-baseline">
+              <th className="pr-2">
+                <input
+                  className="form-control-mat w-full"
+                  placeholder="Search Name"
+                  name="name"
+                  type="text"
+                  onChange={onFilterChange}
+                />
+              </th>
+              <th className="pr-2">
+                <input
+                  type="date"
+                  className="form-control-mat w-full"
+                  name="startSignUpDate"
+                  onChange={onFilterChange}
+                />
+                <input
+                  type="date"
+                  className="form-control-mat w-full"
+                  name="endSignUpDate"
+                  onChange={onFilterChange}
+                />
+              </th>
+              <th className="pr-2">
+                <input
+                  type="date"
+                  className="form-control-mat w-full"
+                  name="startAppointmentDate"
+                  onChange={onFilterChange}
+                />
+                <input
+                  type="date"
+                  className="form-control-mat w-full"
+                  name="endAppointmentDate"
+                  onChange={onFilterChange}
+                />
+              </th>
+              <th className="pr-2">
+                <input
+                  type="number"
+                  className="form-control-mat w-full"
+                  placeholder="Likely"
+                  name="likely"
+                  onChange={onFilterChange}
+                />
+              </th>
+              <th className="pr-2">
+                <input
+                  type="number"
+                  className="form-control-mat w-full"
+                  placeholder="Unlikely"
+                  name="unlikely"
+                  onChange={onFilterChange}
+                />
+              </th>
+              <th></th>
             </tr>
           </thead>
           <tbody className="w-full">
@@ -203,22 +211,25 @@ export default function Patients() {
                 <tr key={item.id}>
                   <td className="p-2">{item.name}</td>
                   <td className="p-2">{item.signupDate}</td>
-                  <td className="p-2">{item.appointmentDate}</td>
+                  <td className="p-2">{getAppointmentRange(item)}</td>
                   <td className="p-2">
-                    <div className="flex gap-3 items-center">
-                      <Link href="#" className="flex-1 text-orange">
-                        {item.likes || 0} likely
-                      </Link>
-                      <Link href="#" className="flex-1 text-main">
-                        {item.unlikes || 0} unlikely
-                      </Link>
+                    <Link href="#" className="flex-1 text-orange">
+                      {item.likes || 0} likely
+                    </Link>
+                  </td>
+                  <td className="p-2">
+                    <Link href="#" className="flex-1 text-main">
+                      {item.unlikes || 0} unlikely
+                    </Link>
+                  </td>
+                  <td className="p-2">
+                    <div className="flex">
                       <Link
                         href={`/landing/patients/${item.id}`}
-                        className="btn-main-inverse ml-4"
+                        className="btn-main-inverse shrink-0"
                       >
                         View Profile
                       </Link>
-                      <div className="flex-1"></div>
                     </div>
                   </td>
                 </tr>

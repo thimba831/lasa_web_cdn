@@ -1,13 +1,19 @@
+import moment from "moment";
+
+const today = moment().format("MM/DD/YY");
+const tmr = moment().add(1, "day").format("MM/DD/YY");
+const ntmr = moment().add(2, "day").format("MM/DD/YY");
 let patients = [
   {
     id: 1237849,
     name: "Brenna Foster",
-    signupDate: "10/24/23 11:10 am",
-    appointmentDate: "10/25/23 2:00 pm",
+    signupDate: today + " 11:10 am",
+    appointmentDate: today,
+    startAppointmentTime: "11:10 am",
+    endAppointmentTime: "11:50 am",
     likes: 3,
     unlikes: 4,
     new: true,
-    age: 29,
     dob: "Sep 1, 1993",
     location: "Denver, CO",
     generalHistory: {
@@ -22,12 +28,13 @@ let patients = [
   {
     id: 1237851,
     name: "Charley Brians",
-    signupDate: "10/22/23 11:15 am",
-    appointmentDate: "10/26/23 3:00 pm",
+    signupDate: today + " 11:15 am",
+    appointmentDate: tmr,
+    startAppointmentTime: "11:10 am",
+    endAppointmentTime: "11:50 am",
     likes: 1,
     unlikes: 5,
     new: true,
-    age: 26,
     dob: "Sep 1, 1997",
     location: "Brooklyn, NY",
     generalHistory: {
@@ -43,11 +50,12 @@ let patients = [
     id: 1237858,
     name: "Jen Miller",
     signupDate: "5/5/23 5:45 pm",
-    appointmentDate: "10/26/23 4:00 pm",
+    appointmentDate: tmr,
+    startAppointmentTime: "11:10 am",
+    endAppointmentTime: "11:50 am",
     likes: 2,
     unlikes: 10,
     new: true,
-    age: 29,
     dob: "Sep 1, 1993",
     location: "Denver, CO",
     generalHistory: {
@@ -63,10 +71,11 @@ let patients = [
     id: 1237863,
     name: "Joanne Stiltmore",
     signupDate: "5/3/23 9:15 am",
-    appointmentDate: "10/26/23 11:00 am",
+    appointmentDate: tmr,
+    startAppointmentTime: "11:10 am",
+    endAppointmentTime: "11:50 am",
     likes: 5,
     unlikes: 4,
-    age: 29,
     dob: "Sep 1, 1993",
     location: "Denver, CO",
     generalHistory: {
@@ -82,10 +91,11 @@ let patients = [
     id: 1237868,
     name: "Brie Larson",
     signupDate: "5/2/23 12:15 am",
-    appointmentDate: "10/27/23 10:10 pm",
+    appointmentDate: ntmr,
+    startAppointmentTime: "11:10 am",
+    endAppointmentTime: "11:50 am",
     likes: 2,
     unlikes: 3,
-    age: 29,
     dob: "Sep 1, 1993",
     location: "Denver, CO",
     generalHistory: {
@@ -101,10 +111,11 @@ let patients = [
     id: 1237872,
     name: "Amy Macklemore",
     signupDate: "4/30/23 9:15 am",
-    appointmentDate: "10/28/23 1:15 pm",
+    appointmentDate: ntmr,
+    startAppointmentTime: "11:10 am",
+    endAppointmentTime: "11:50 am",
     likes: 4,
     unlikes: 6,
-    age: 29,
     dob: "Sep 1, 1993",
     location: "Denver, CO",
     generalHistory: {

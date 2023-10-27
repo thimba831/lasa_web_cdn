@@ -27,7 +27,11 @@ body {
 }
 
 .form-control {
-  @apply p-2 rounded-lg border border-main focus:outline-none text-main
+  @apply p-2 rounded-lg border border-main focus:outline-none text-main h-10
+}
+
+.form-control-mat {
+  @apply p-2 border-b border-main focus:outline-none text-main h-10
 }
 
 .btn-main {

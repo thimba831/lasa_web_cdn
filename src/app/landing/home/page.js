@@ -5,6 +5,7 @@ import { getPatientList } from "@/app/data/patients";
 import moment from "moment";
 import ThSort from "@/app/components/ThSort";
 import { useMemo, useState } from "react";
+import { getAppointmentRange } from "@/app/utils/dateUtil";
 
 export default function Home() {
   const patients = getPatientList();
@@ -32,8 +33,8 @@ export default function Home() {
       }
       if (sorter.field === "signupDate" || sorter.field === "appointmentDate") {
         result = result.sort((a, b) => {
-          const tsA = moment(a["signupDate"]).valueOf();
-          const tsB = moment(b["signupDate"]).valueOf();
+          const tsA = moment(a[sorter.field]).valueOf();
+          const tsB = moment(b[sorter.field]).valueOf();
 
           if (tsA < tsB) {
             return sorter.direction ? 1 : -1;
@@ -138,7 +139,9 @@ export default function Home() {
                   onClick={onClickHeader}
                 />
               </th>
-              <th className="p-2">Health Profile Flags</th>
+              <th colSpan={3} className="p-2">
+                Health Profile Flags
+              </th>
             </tr>
           </thead>
           <tbody className="w-full">
@@ -147,22 +150,25 @@ export default function Home() {
                 <tr key={item.id}>
                   <td className="p-2">{item.name}</td>
                   <td className="p-2">{item.signupDate}</td>
-                  <td className="p-2">{item.appointmentDate}</td>
+                  <td className="p-2">{getAppointmentRange(item)}</td>
                   <td className="p-2">
-                    <div className="flex gap-3 items-center">
-                      <Link href="#" className="flex-1 text-orange">
-                        {item.likes || 0} likely
-                      </Link>
-                      <Link href="#" className="flex-1 text-main">
-                        {item.unlikes || 0} unlikely
-                      </Link>
+                    <Link href="#" className="flex-1 text-orange">
+                      {item.likes || 0} likely
+                    </Link>
+                  </td>
+                  <td className="p-2">
+                    <Link href="#" className="flex-1 text-main">
+                      {item.unlikes || 0} unlikely
+                    </Link>
+                  </td>
+                  <td className="p-2">
+                    <div className="flex">
                       <Link
                         href={`/landing/patients/${item.id}`}
-                        className="btn-main-inverse ml-4"
+                        className="btn-main-inverse shrink-0"
                       >
                         View Profile
                       </Link>
-                      <div className="flex-1"></div>
                     </div>
                   </td>
                 </tr>

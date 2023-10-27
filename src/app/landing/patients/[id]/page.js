@@ -18,6 +18,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import moment from "moment";
+import { getAge } from "@/app/utils/dateUtil";
 
 ChartJS.register(
   CategoryScale,
@@ -244,7 +246,7 @@ export default function PatientProfile({ params }) {
   if (!patient) return <NotFound />;
 
   return (
-    <div>
+    <div className="text-black">
       <button
         className="bg-[url(/shape.svg)] sticky top-6 left-6 md:left-12 bg-cover w-16 h-16 flex justify-center items-center drop-shadow-xl hover:drop-shadow-2xl"
         onClick={() => router.push("/landing/patients")}
@@ -276,7 +278,7 @@ export default function PatientProfile({ params }) {
               </thead>
               <tbody>
                 <tr>
-                  <th>{patient.age}</th>
+                  <th>{getAge(patient)}</th>
                   <th>{patient.dob}</th>
                   <th>{patient.location}</th>
                   <th>{patient.id}</th>

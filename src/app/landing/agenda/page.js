@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { getPatientList } from "@/app/data/patients";
 import moment from "moment";
+import { getAppointmentRange } from "@/app/utils/dateUtil";
 
 export default function Agenda() {
   const agenda = getPatientList()
@@ -16,10 +17,7 @@ export default function Agenda() {
     )
     .reduce((res, item) => {
       const ts = moment(item.appointmentDate).startOf("day").valueOf();
-      const hour =
-        moment(item.appointmentDate).format("hh:mm a") +
-        " - " +
-        moment(item.appointmentDate).add(45, "minutes").format("hh:mm a");
+      const hour = getAppointmentRange(item, false);
       res[ts] = res[ts]
         ? [
             ...res[ts],
@@ -69,8 +67,8 @@ export default function Agenda() {
           <tbody className="w-full">
             {Object.keys(agenda).map((date) => {
               return (
-                <tr key={date} className="border-t border-gray">
-                  <td className="p-2 align-baseline">
+                <tr key={date} className="border-t border-gray align-baseline">
+                  <td className="p-2">
                     <div className="flex mx-8 gap-3 items-center">
                       <p
                         className={`${
@@ -88,14 +86,17 @@ export default function Agenda() {
                       </p>
                     </div>
                   </td>
-                  <td className="p-2 align-baseline">
+                  <td className="p-2">
                     {agenda[date].map((c, i) => {
                       return (
-                        <div className="flex gap-3 items-center py-2" key={i}>
+                        <div className="flex items-center py-2 gap-3" key={i}>
                           <p className="flex-1 flex items-center relative before:absolute before:left-0 before:w-3 before:h-3 before:content-[''] before:bg-main before:rounded-full">
-                            <span className="ml-12"> {c.hour}</span>
+                            <span className="ml-8 whitespace-nowrap">
+                              {" "}
+                              {c.hour}
+                            </span>
                           </p>
-                          <p className="flex-1">
+                          <p className="flex-1 whitespace-nowrap">
                             {
                               getPatientList().find(
                                 ({ id }) => id == c.patientId
@@ -104,7 +105,7 @@ export default function Agenda() {
                           </p>
                           <Link
                             href={`/landing/patients/${c.patientId}`}
-                            className="btn-main-inverse ml-4"
+                            className="btn-main-inverse whitespace-nowrap"
                           >
                             View Profile
                           </Link>

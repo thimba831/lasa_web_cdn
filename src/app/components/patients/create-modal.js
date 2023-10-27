@@ -3,6 +3,7 @@
 import { Fragment, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { addNewPatient } from "@/app/data/patients";
+import moment from "moment";
 
 export default function PatientCreateModal({
   visible,
@@ -11,9 +12,15 @@ export default function PatientCreateModal({
   ...props
 }) {
   const cancelButtonRef = useRef(null);
-  const [newPatient, setNewPatient] = useState();
+  const [newPatient, setNewPatient] = useState({ dob: "1993-09-01" });
   const onSubmit = () => {
-    const item = { id: new Date().getTime(), ...newPatient };
+    const item = {
+      id: new Date().getTime(),
+      ...newPatient,
+      new: true,
+      signupDate: moment().format("MM/DD/YY hh:mm a"),
+      appointmentDate: moment(newPatient.appointmentDate).format("MM/DD/YY"),
+    };
     addNewPatient(item);
     onCreated(item);
     setVisible(false);
@@ -67,15 +74,8 @@ export default function PatientCreateModal({
                       className="form-control w-full"
                       type="text"
                       name="name"
-                      onChange={onInputChange}
-                    />
-                  </div>
-                  <div className="my-1 w-full">
-                    <label className="block text-base">Age</label>
-                    <input
-                      className="form-control w-full"
-                      type="number"
-                      name="age"
+                      placeholder="Susan Smith"
+                      // value={newPatient ? newPatient.name : ""}
                       onChange={onInputChange}
                     />
                   </div>
@@ -85,6 +85,7 @@ export default function PatientCreateModal({
                       className="form-control w-full"
                       type="date"
                       name="dob"
+                      defaultValue={"1993-09-01"}
                       onChange={onInputChange}
                     />
                   </div>
@@ -94,8 +95,42 @@ export default function PatientCreateModal({
                       className="form-control w-full"
                       type="text"
                       name="location"
+                      // value={newPatient ? newPatient.location : ""}
+                      placeholder="Denver, CO"
                       onChange={onInputChange}
                     />
+                  </div>
+                  <div className="my-1 w-full">
+                    <label className="block text-base">Appointment Date</label>
+                    <input
+                      className="form-control w-full"
+                      type="date"
+                      // value={newPatient ? newPatient.appointmentDate : ""}
+                      name="appointmentDate"
+                      onChange={onInputChange}
+                    />
+                  </div>
+                  <div className="my-1 w-full">
+                    <label className="block text-base">Appointment Time</label>
+                    <div className="flex items-center w-full">
+                      <input
+                        className="form-control w-full"
+                        type="time"
+                        name="startAppointmentTime"
+                        // value={
+                        //   newPatient ? newPatient.startAppointmentTime : ""
+                        // }
+                        onChange={onInputChange}
+                      />
+                      <span className="mx-1">~</span>
+                      <input
+                        className="form-control w-full"
+                        type="time"
+                        name="endAppointmentTime"
+                        // value={newPatient ? newPatient.endAppointmentTime : ""}
+                        onChange={onInputChange}
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="bg-gray-50 px-4 py-3 flex flex-row-reverse sm:px-6">
